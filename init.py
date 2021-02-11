@@ -107,13 +107,13 @@ class Board:
         for (r,c) in changing_cells:
             self.data[r, c] = color
 
-    # game_info: the string which is returned by Game.getInfo function
-    def update(self, game_info):
-        rows = game_info.split('\n')[3:11]
+    # cell_lines: only lines of the 'cell' variable in the string which
+    #             is returned by Game.getInfo function
+    def update(self, cell_lines):
         for r in range(8):
-            columns = rows[r].split(' ')
+            cells = cell_lines[r].split(' ')
             for c in range(8):
-                self.data[r, c] = columns[c]
+                self.data[r, c] = cells[c]
 
 class Game:
     def __init__(self):
