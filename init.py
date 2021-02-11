@@ -176,15 +176,10 @@ class Game:
         s = ""
 
         s += "victory_cell\n"
-        for i in range(5):
-            s += self.victory_cells[i]
-            s += "\n" if i == 4 else " "
+        s += " ".join(self.victory_cells) + "\n"
 
         s += "cell\n"
-        for r in range(8):
-            for c in range(8):
-                s += self.board.data[r, c]
-                s += "\n" if c == 7 else " "
+        s += "\n".join(" ".join(self.board.getRow(r)) for r in "12345678") + "\n"
 
         s += "you\n"
         s += self.getNextTurn() + "\n"
@@ -198,9 +193,7 @@ class Game:
             return s
 
         s += "history\n"
-        for i in range(len(self.history)):
-            s += self.history[i]
-            s += "\n" if i == len(self.history) - 1 else " "
+        s += " ".join(self.history) + "\n"
 
         s += "winner\n"
         s += self.getWinner() + "\n"
