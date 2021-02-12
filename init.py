@@ -104,7 +104,7 @@ class Board:
         column_id = self.getColumnId(alphabet_character)
 
         changing_cells = self.getFlips(position, color) + [(row_id, column_id)]
-        for (r,c) in changing_cells:
+        for (r, c) in changing_cells:
             self.data[r, c] = color
 
     # cell_lines: only lines of the 'cell' variable in the string which
