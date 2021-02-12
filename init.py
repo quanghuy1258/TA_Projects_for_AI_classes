@@ -8,23 +8,37 @@ class Board:
         self.data[3, 3] = self.data[4, 4] = 'W'
         self.data[3, 4] = self.data[4, 3] = 'B'
 
+    # numeric_character: "12345678"
+    # return: index of row
     def getRowId(self, numeric_character):
         return ord(numeric_character) - ord('1')
 
+    # numeric_character: "12345678"
+    # return: values of row
     def getRow(self, numeric_character):
         return self.data[self.getRowId(numeric_character), :]
 
+    # alphabet_character: "abcdefgh"
+    # return: index of column
     def getColumnId(self, alphabet_character):
         return ord(alphabet_character) - ord('a')
 
+    # alphabet_character: "abcdefgh"
+    # return: values of column
     def getColumn(self, alphabet_character):
         return self.data[:, self.getColumnId(alphabet_character)]
 
+    # position: "^\w\d$"
+    # return: value at position
     def getValue(self, position):
         alphabet_character, numeric_character = tuple(position)
         return self.data[self.getRowId(numeric_character),
                          self.getColumnId(alphabet_character)]
 
+    # position: "^\w\d$"
+    # direction: (int, int) ~ (r, c)
+    # color: {'B', 'W'}
+    # return: {True, False}
     def isDirectionPlaceable(self, position, direction, color):
         if self.getValue(position) != 'E':
             return False
@@ -45,6 +59,9 @@ class Board:
                 else:
                     return True
 
+    # position: "^\w\d$"
+    # color: {'B', 'W'}
+    # return: {True, False}
     def isPlaceable(self, position, color):
         return self.isDirectionPlaceable(position, ( 1,  0), color) or    \
                self.isDirectionPlaceable(position, ( 1,  1), color) or    \
@@ -55,12 +72,15 @@ class Board:
                self.isDirectionPlaceable(position, ( 0, -1), color) or    \
                self.isDirectionPlaceable(position, ( 1, -1), color)
 
+    # color: {'B', 'W'}
+    # return: {True, False}
     def isPlayable(self, color):
         for (r, c) in itertools.product(list('12345678'), list('abcdefgh')):
             if self.isPlaceable(c + r, color):
                 return True
         return False
 
+    # return: (int, int) ~ (b, w)
     def getResult(self):
         b, w = 0, 0
         for (r, c) in itertools.product(range(8), range(8)):
@@ -68,6 +88,10 @@ class Board:
             w += 1 if self.data[r, c] == 'W' else 0
         return b, w
 
+    # position: "^\w\d$"
+    # direction: (int, int) ~ (r, c)
+    # color: {'B', 'W'}
+    # return: list of cells which will change color
     def getDirectionFlips(self, position, direction, color):
         if self.getValue(position) != 'E':
             return []
@@ -87,6 +111,9 @@ class Board:
                 return ret
             ret.append((r, c))
 
+    # position: "^\w\d$"
+    # color: {'B', 'W'}
+    # return: list of cells which will change color
     def getFlips(self, position, color):
         return self.getDirectionFlips(position, ( 1,  0), color) +    \
                self.getDirectionFlips(position, ( 1,  1), color) +    \
@@ -98,6 +125,8 @@ class Board:
                self.getDirectionFlips(position, ( 1, -1), color)
 
     # Assume that the 'color' player can place a piece at the 'position' cell of the board
+    # color: {'B', 'W'}
+    # return: list of cells which will change color
     def place(self, position, color):
         alphabet_character, numeric_character = tuple(position)
         row_id = self.getRowId(numeric_character)
@@ -124,9 +153,11 @@ class Game:
         self.history = []
         self.winner = None
 
+    # return: {"BLACK", "WHITE"} ~ who will play next
     def getNextTurn(self):
         return "BLACK" if len(self.history) % 2 == 0 else "WHITE"
 
+    # return: {True, False} ~ check if the game is over
     def checkGameOver(self):
         if self.winner is not None:
             return True
