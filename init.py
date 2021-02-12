@@ -159,6 +159,10 @@ class Game:
         if self.checkGameOver():
             return False
 
+        if position == "NULL":
+            self.winner = "WHITE" if self.getNextTurn() == "BLACK" else 'BLACK'
+            return True
+
         color = 'B' if self.getNextTurn() == "BLACK" else 'W'
 
         if not self.board.isPlaceable(position, color):
