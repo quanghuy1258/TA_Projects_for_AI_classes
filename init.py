@@ -35,6 +35,11 @@ class Board:
         return self.data[self.getRowId(numeric_character),
                          self.getColumnId(alphabet_character)]
 
+    # r, c: int
+    # return: {True, False}
+    def isOutOfRange(self, r, c):
+        return (r < 0) or (r > 7) or (c < 0) or (c > 7)
+
     # position: "^\w\d$"
     # direction: (int, int) ~ (r, c)
     # color: {'B', 'W'}
@@ -51,7 +56,7 @@ class Board:
         for i in range(1, 9):
             r = row_id + i * row_direction
             c = column_id + i * column_direction
-            if (r < 0) or (r > 7) or (c < 0) or (c > 7) or (self.data[r, c] == 'E'):
+            if self.isOutOfRange(r, c) or (self.data[r, c] == 'E'):
                 return False
             if self.data[r, c] == color:
                 if i == 1:

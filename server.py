@@ -10,17 +10,17 @@ class GameServerHandler(socketserver.BaseRequestHandler):
         isPlayFirst = random.choice([True, False])
         if isPlayFirst:
             gameInstance.setNextTurn(callBot(gameInstance.getInfo()))
-            if gameInstance.checkGameOver():
-                self.request.sendall(bytes(gameInstance.getFinalResult(), "ASCII"))
 
         while not gameInstance.checkGameOver():
             self.request.sendall(bytes(gameInstance.getInfo(), "ASCII"))
 
             ret = str(self.request.recv(8), "ASCII")
             if ret != "NULL" and re.fullmatch("\w\d", ret) is None:
-                self.request.sendall(bytes("ERROR INPUT: " + ret, "ASCII"))
+                self.request.sendall(bytes("ERROR: INVALID INPUT ~ " + repr(ret), "ASCII"))
                 return
-            gameInstance.setNextTurn(ret)
+            if not gameInstance.setNextTurn(ret):
+                self.request.sendall(bytes("ERROR: INVALID MOVE ~ " + repr(ret), "ASCII"))
+                return
 
             if not gameInstance.checkGameOver():
                 gameInstance.setNextTurn(callBot(gameInstance.getInfo()))
