@@ -131,7 +131,6 @@ class Board:
 
     # Assume that the 'color' player can place a piece at the 'position' cell of the board
     # color: {'B', 'W'}
-    # return: list of cells which will change color
     def place(self, position, color):
         alphabet_character, numeric_character = tuple(position)
         row_id = self.getRowId(numeric_character)
