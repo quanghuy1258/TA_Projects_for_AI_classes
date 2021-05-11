@@ -21,9 +21,10 @@ class GameServerHandler(socketserver.BaseRequestHandler):
                 self.request.sendall(bytes(gameInstance.getInfo(), "ASCII"))
 
                 try:
-                    ret = str(self.request.recv(8), "ASCII")
+                    temp = self.request.recv(8)
+                    ret = str(temp, "ASCII")
                 except:
-                    self.request.sendall(bytes("ERROR: INVALID ASCII STRING ~ " + repr(ret), "ASCII"))
+                    self.request.sendall(bytes("ERROR: INVALID ASCII STRING ~ " + repr(temp), "ASCII"))
                     return
                 if ret != "NULL" and re.fullmatch("\w\d", ret) is None:
                     self.request.sendall(bytes("ERROR: INVALID INPUT ~ " + repr(ret), "ASCII"))
